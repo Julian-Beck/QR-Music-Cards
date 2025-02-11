@@ -10,14 +10,19 @@ if __name__ == "__main__":
     post_url = input("Please enter the link for the source (enter for default): ")
     if post_url == "": post_url = "https://open.spotify.com/playlist/54J4amTEwP9iHXLtGqv1Vj"
 
+    print("(0/3) fetch urls of spotify tracks...")
     if "spotify" in post_url:
         playlist_to_url(project_name, post_url)
     elif "reddit" in post_url:
         comments_to_url(project_name, post_url)
 
+    print("(1/3) fetch data of the tracks...")
     urls_to_data(project_name)
 
+    print("(2/3) create pdf...")
     data_to_pdf(project_name)
+    
+    print(f"(3/3) finished!\nPDF was created under ./pdf/{project_name}.pdf")
 
 
 
