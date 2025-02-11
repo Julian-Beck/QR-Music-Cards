@@ -57,7 +57,7 @@ class PDF_Creator:
                     artist, track, year, spotify_id = data_list[i + j]
                     # Odd rows (0, 2, 4, ...) - Song data
                     #cell_content = f"<font size='12'>{artist}</font><br/><br/><font size='16'>{year}</font><br/><br/><font size='12'>{track}</font>"
-                    cell_content = f"<para align='center'><font size='10'>{artist}</font><br/><br/><br/><font size='24'>{year}</font><br/><br/><font size='10'>{track}</font></para>"
+                    cell_content = f"<para align='center'><font size='10'>{artist.replace('&&', ', ')}</font><br/><br/><br/><font size='24'>{year}</font><br/><br/><font size='10'>{track}</font></para>"
                     paragraph = Paragraph(cell_content, styles['Normal'])
                     table_row1.append(paragraph)
                     if (len(table_row1) == 3): 
