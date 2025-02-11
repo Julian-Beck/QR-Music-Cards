@@ -32,7 +32,7 @@ def save_access_token_to_secrets(config, token, type):
     with open('secrets.ini', 'w') as configfile:
         config.write(configfile)
 
-if __name__ == "__main__":
+def update_token():
     secrets = configparser.ConfigParser()
     secrets.read('secrets.ini')
     user, password = read_request_data(secrets)
@@ -43,4 +43,5 @@ if __name__ == "__main__":
     save_access_token_to_secrets(secrets, response["access_token"], response["token_type"])
     print("Generated new token!")
     
-
+if __name__ == "__main__":
+    update_token()

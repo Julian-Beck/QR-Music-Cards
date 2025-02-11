@@ -2,8 +2,21 @@ import requests
 import configparser
 import subprocess
 import json
+from src.Update_Token import update_token
 
-def read_request_data():
+def test_secrets():
+    access, token_type = read_access_secrets()
+    headers = { "Authorization": f"{token_type} {access}" }
+    try:
+        # Make a GET request to the Spotify API
+        test_url = "https://api.spotify.com/v1/tracks/6yAQLrV6OKum99rMFDWTZG"
+        response = requests.get(test_url, headers=headers)
+        response.raise_for_status()
+    except Exception as err:
+        print(f"An error occurred: {err}. Generate new access token!")
+        update_token()
+
+def read_access_secrets():
     config = configparser.ConfigParser()
     config.read('secrets.ini')
     access_token = config["ACCESS"].get("ACCESS_TOKEN")
@@ -69,46 +82,26 @@ def get_reddit_post_comments(post_url):
     except Exception as e:
         print("An error occurred:", e)
 
-def get_reddit_post_comments_advanced(post_url):
-    try:
-        # Append '.json' to the post URL to get the comments in JSON format
-        json_url = f"{post_url}.json"
-        
-        # Make a GET request to the Reddit API
-        response = requests.get(json_url)
-        response.raise_for_status()  # Raise an error for bad responses
-        
-        # Parse the JSON response
-        data = response.json()
-        comments_data = data[1]['data']['children']
-        
-        comments_to_return = []
-        for comment in comments_data:
-            if 'body' in comment['data']:
-                comments_to_return.append(comment['data']['body'])
-                print(f"{comment['data']['body']}\n")
+def read_data(project_name):
+    data_list = []
+    with open(f"./csv/{project_name}-urls.csv", "r") as file:
+        for line in file:
+            data_list.append(line.strip())
+    return data_list
 
-        return comments_to_return
-
-    except requests.exceptions.HTTPError as http_err:
-        print(f"HTTP error occurred: {http_err}")  # Handle HTTP errors
-    except Exception as err:
-        print(f"An error occurred: {err}")  # Handle other errors
-
-def save_data(data):
-    with open("data.csv", "w") as file:
+def save_data(data, project_name):
+    with open(f"./csv/{project_name}-data.csv", "w") as file:
         for (artists, track, year, spotify_id) in data:
             file.write(f"{artists}, {track}, {year}, {spotify_id.split('?')[0]}\n")
 
-if __name__ == "__main__":
-    post_url = "<insert url of reddit post (like https://www.reddit.com/r/hardstyle/comments/ID)>"
+def urls_to_data(project_name):
+    comments = read_data(project_name)
+    
+    access, token_type = read_access_secrets()
 
-    comments = get_reddit_post_comments(post_url)
-    comments = ['https://open.spotify.com/track/12FwJBQbg71k7EMPz7aHlj',
-                'https://open.spotify.com/track/5DaHRGpgfmx7mcCYrXmlxT',
-                'https://open.spotify.com/track/4IQRBdStUUgT2dExFKQYsN',
-                'https://open.spotify.com/track/5DYMuWtQyr1J9Af0SMrDz8']
-
-    access, token_type = read_request_data()
     data_list = [make_request(comment, access, token_type) for comment in comments]
-    save_data(data_list)
+    save_data(data_list, project_name)
+
+if __name__ == "__main__":
+    name = "test"
+    urls_to_data(name)
