@@ -8,7 +8,7 @@ if __name__ == "__main__":
 
     project_name = input("Please enter a name for the Project: ")
     post_url = input("Please enter the link for the source (enter for default): ")
-    if post_url == "": post_url = "https://www.reddit.com/r/hardstyle/comments/h81j4g/"
+    if post_url == "": post_url = "https://open.spotify.com/playlist/54J4amTEwP9iHXLtGqv1Vj"
 
     if "spotify" in post_url:
         playlist_to_url(project_name, post_url)

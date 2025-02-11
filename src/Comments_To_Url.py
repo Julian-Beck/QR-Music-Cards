@@ -34,19 +34,17 @@ def extract_track_ids(urls):
 def save_data(data, project_name):
     with open(f"./csv/{project_name}-urls.csv", "w") as file:
         for url in data:
-            file.write(f"{url}\n")
+            file.write(f"https://open.spotify.com/track/{url}\n")
 
 def comments_to_url(project_name, post_url):
     comments = get_reddit_post_comments(post_url)
 
     data = []
-    added_ids = []
     for comment in comments:
         ids = extract_track_ids(comment)
         for id in ids:
-            if not id in added_ids:
-                data.append(f"https://open.spotify.com/track/{id}")
-                added_ids.append(id)
+            if not id in data:
+                data.append(id)
     
     save_data(data, project_name)
 

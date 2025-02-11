@@ -1,7 +1,5 @@
 import requests
 import configparser
-import subprocess
-import json
 from src.Update_Token import update_token
 
 def test_secrets():
@@ -58,29 +56,6 @@ def make_request(url_song, access, token_type):
         print(f"HTTP error occurred: {http_err}")  # Handle HTTP errors
     except Exception as err:
         print(f"An error occurred: {err}") 
-
-def get_reddit_post_comments(post_url):
-    try:
-        command = f"curl -s {post_url}.json"
-        result = subprocess.run(command, shell=True, capture_output=True, text=True)
-        
-        if result.returncode != 0:
-            print("Error fetching data:", result.stderr)
-            return
-        
-        data = json.loads(result.stdout)
-        comments_data = data[1]['data']['children']
-        
-        comments_to_return = []
-        for comment in comments_data:
-            if 'body' in comment['data']:
-                comments_to_return.append(comment['data']['body'])
-                print(f"{comment['data']['body']}\n")
-
-        return comments_to_return
-    
-    except Exception as e:
-        print("An error occurred:", e)
 
 def read_data(project_name):
     data_list = []
