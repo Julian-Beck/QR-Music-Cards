@@ -36,6 +36,7 @@ def playlist_to_url(project_name, playlist_url):
     tracks = make_request(playlist_url, access, token_type)
     data = [track["track"]["id"] for track in tracks if not track["track"]["is_local"]]
     save_data(data, project_name)
+    return len(data)
     
 if __name__ == "__main__":
     name = "test"

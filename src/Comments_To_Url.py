@@ -47,6 +47,7 @@ def comments_to_url(project_name, post_url):
                 data.append(id)
     
     save_data(data, project_name)
+    return len(data)
 
 if __name__ == "__main__":
     url = "https://www.reddit.com/r/hardstyle/comments/h81j4g/" # "<insert url of reddit post (like https://www.reddit.com/r/hardstyle/comments/ID)>"

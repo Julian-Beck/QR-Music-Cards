@@ -54,6 +54,8 @@ def create_pdf(data_list, filename):
         for j in range(18):
             if i + j < len(data_list):
                 artist, track, year, spotify_id = data_list[i + j]
+                artist = artist.replace(";", ",")
+                track = track.replace(";", ",")
                 cell_content = f"<para align='center'><font size='10'>{artist.replace('&&', ', ')}</font><br/><br/><br/><font size='24'>{year}</font><br/><br/><font size='10'>{track}</font></para>"
                 paragraph = Paragraph(cell_content, styles['Normal'])
                 table_row1.append(paragraph)
@@ -103,5 +105,5 @@ def data_to_pdf(project_name):
     create_pdf(data_list, f"./pdf/{project_name}-music-cards.pdf")
 
 if __name__ == "__main__":
-    name = "test"
+    name = "khira"
     data_to_pdf(name)
